@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,6 +24,7 @@ public class Course {
     @Column(nullable = false)
     private String title;
 
+    @Column(length = 2000)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -31,6 +34,9 @@ public class Course {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private CourseStatus status = CourseStatus.DRAFT;
+
+    @OneToMany(mappedBy = "course")
+    private List<Lesson> lessons = new ArrayList<>();
 
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -42,7 +48,9 @@ public class Course {
         createdAt = LocalDateTime.now();
     }
 
-    public Integer getTotalLessons() { return 0; }
+    public int getTotalLessons() {
+        return lessons.size();
+    }
 
     public boolean isAvailableForEnrollment() {
         return status == CourseStatus.PUBLISHED;
@@ -51,5 +59,13 @@ public class Course {
     public void publish() {
         this.status = CourseStatus.PUBLISHED;
         this.publishedAt = LocalDateTime.now();
+    }
+
+    public int getTotalEstimatedMinutes() {
+        int total = 0;
+        for (Lesson lesson : lessons) {
+            total += lesson.getEstimatedMinutes();
+        }
+        return total;
     }
 }
