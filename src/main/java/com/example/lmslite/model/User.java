@@ -30,7 +30,7 @@ public abstract class User {
     private LocalDateTime createdAt;
 
     @PrePersist
-    public void setCreationDate() {
+    void setCreationDate() {
         createdAt = LocalDateTime.now();
     }
 

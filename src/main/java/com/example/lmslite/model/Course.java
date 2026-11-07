@@ -43,6 +43,9 @@ public class Course {
 
     private LocalDateTime publishedAt;
 
+    @OneToMany(mappedBy = "course")
+    private List<Enrollment> enrollments = new ArrayList<>();
+
     @PrePersist
     void onCreate() {
         createdAt = LocalDateTime.now();

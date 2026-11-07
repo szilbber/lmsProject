@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,5 +15,7 @@ import java.util.ArrayList;
 @Table(name = "students")
 public class Student extends User {
 
-//    private List<Enrollment> enrollments;
+    @OneToMany(mappedBy = "student")
+    private List<Enrollment> enrollments = new ArrayList<>();
+
 }
