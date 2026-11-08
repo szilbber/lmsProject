@@ -5,10 +5,14 @@ import com.example.lmslite.model.Question;
 
 import java.util.List;
 
-public record CreateLessonRequest (
+public record CreateLessonRequest(
         String title,
         LessonType type,
         String videoUrl,
+        Integer durationMinutes,
         String content,
-        List<Question> questions
+        Integer readingTimeMinutes,
+        Integer passingScore,
+        Integer timeLimitMinutes,
+        List<QuestionRequest> questions
 ) {}

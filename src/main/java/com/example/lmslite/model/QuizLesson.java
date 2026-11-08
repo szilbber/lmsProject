@@ -1,6 +1,7 @@
 package com.example.lmslite.model;
 
 import com.example.lmslite.enums.LessonType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import java.util.List;
 @Entity
 public class QuizLesson extends Lesson {
 
-    @OneToMany(mappedBy = "quiz")
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions = new ArrayList<>();
     private int passingScore;
     private Integer timeLimitMinutes;

@@ -1,0 +1,75 @@
+### 1. Создать инструктора
+POST http://localhost:8080/api/instructors
+Content-Type: application/json
+
+{"firstName": "Даня", "lastName": "Данин", "email": "dana@test.com", "bio": "Ruby-разработчик"}
+
+### 2. Создать студента
+POST http://localhost:8080/api/students
+Content-Type: application/json
+
+{"firstName": "Даша", "lastName": "Иванова", "email": "dasa@test.com"}
+
+### 3. Создать курс
+POST http://localhost:8080/api/courses
+Content-Type: application/json
+
+{"title": "Ruby для начинающих", "description": "Третий курс", "instructorId": 4}
+
+### 4. Добавить видеоурок
+POST http://localhost:8080/api/courses/10/lessons
+Content-Type: application/json
+
+{"title": "Введение", "type": "VIDEO", "videoUrl": "https://example.com/v1", "durationMinutes": 1}
+
+### 5. Добавить текстовый урок
+POST http://localhost:8080/api/courses/10/lessons
+Content-Type: application/json
+
+{"title": "Переменные", "type": "TEXT", "content": "# Переменные", "readingTimeMinutes": 10}
+
+### 6. Добавить тест с вопросом
+POST http://localhost:8080/api/courses/10/lessons
+Content-Type: application/json
+
+{"title": "Тест продвинутый", "type": "QUIZ", "passingScore": 70, "timeLimitMinutes": 9,
+  "questions": [{"text": "Что выведет 3+3?", "options": ["3", "4", "22"], "correctOptionIndex": 2}]}
+
+### 7. Детали курса с уроками
+GET http://localhost:8080/api/courses/10
+
+### 8. Список уроков курса
+GET http://localhost:8080/api/courses/10/lessons
+
+### 9. Детали урока
+GET http://localhost:8080/api/lessons/16
+
+### 10. Опубликовать курс
+PATCH http://localhost:8080/api/courses/10/publish
+
+### 11. Список опубликованных курсов
+GET http://localhost:8080/api/courses
+
+### 12. Курса нет
+GET http://localhost:8080/api/courses/9999
+
+### 13. Тот же email для студента
+POST http://localhost:8080/api/students
+Content-Type: application/json
+
+{"firstName": "Мария", "lastName": "Иванова", "email": "maria@test.com"}
+
+### 14. Публикация курса без уроков
+PATCH http://localhost:8080/api/courses/9/publish
+
+### 15. Удаление опубликованного курса
+DELETE http://localhost:8080/api/courses/1
+
+### 16. Удаление черновика
+DELETE http://localhost:8080/api/courses/9
+
+### 17. Тип урока не изменить
+PUT http://localhost:8080/api/lessons/1
+Content-Type: application/json
+
+{"title": "Введение", "type": "TEXT", "content": "x", "readingTimeMinutes": 5}

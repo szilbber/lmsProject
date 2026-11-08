@@ -35,7 +35,7 @@ public class Course {
     @Column(nullable = false)
     private CourseStatus status = CourseStatus.DRAFT;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Lesson> lessons = new ArrayList<>();
 
     @Column(updatable = false)
