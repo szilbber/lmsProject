@@ -18,4 +18,7 @@ public class Student extends User {
     @OneToMany(mappedBy = "student")
     private List<Enrollment> enrollments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "student")
+    private List<Certificate> certificates = new ArrayList<>();
+
 }

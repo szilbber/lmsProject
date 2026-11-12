@@ -1,0 +1,29 @@
+### 1. Новый студент
+POST http://localhost:8080/api/students
+Content-Type: application/json
+
+{"firstName": "Сертификат", "lastName": "Проверкин", "email": "cert1@test.com"}
+
+### 2. Записать на курс
+POST http://localhost:8080/api/enrollments
+Content-Type: application/json
+
+{"studentId": 9, "courseId": 12}
+
+### 3. Пройти уроки
+POST http://localhost:8080/api/enrollments/7/lessons/21/complete
+
+###
+POST http://localhost:8080/api/enrollments/7/lessons/22/complete
+
+### 4. Сертификаты студента
+GET http://localhost:8080/api/students/9/certificates
+
+### 5. Проверка по коду
+GET http://localhost:8080/api/certificates/a5524afb-5174-4a69-a15b-2523429caf6a
+
+### 6. Скачать сертификат
+GET http://localhost:8080/api/certificates/1/download
+
+### 7. Неизвестный код
+GET http://localhost:8080/api/certificates/not-a-code

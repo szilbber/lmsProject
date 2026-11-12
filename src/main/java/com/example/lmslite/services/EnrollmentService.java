@@ -24,6 +24,7 @@ public class EnrollmentService {
     private final LessonRepository lessonRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final LessonProgressRepository  lessonProgressRepository;
+    private final CertificateService certificateService;
 
     @Transactional
     public EnrollmentResponse enrollStudent(Long studentId, Long courseId) {
@@ -55,6 +56,16 @@ public class EnrollmentService {
 
     @Transactional
     public ProgressResponse completeLesson(Long enrollmentId, Long lessonId) {
+        Lesson lesson = lessonRepository.findById(lessonId)
+                .orElseThrow(() -> new LessonNotFoundException("Урок не найден"));
+        if (lesson instanceof QuizLesson) {
+            throw new IllegalStateException("Тест засчитывается только после успешной сдачи");
+        }
+        return markCompleted(enrollmentId, lessonId);
+    }
+
+    @Transactional
+    public ProgressResponse markCompleted(Long enrollmentId, Long lessonId) {
 
         Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
                 .orElseThrow(() -> new EnrollmentNotFoundException("Запись на курс не найдена"));
@@ -84,6 +95,7 @@ public class EnrollmentService {
         if (enrollment.getCompletedLessons().size() >= enrollment.getCourse().getTotalLessons()) {
             enrollment.setStatus(EnrollmentStatus.COMPLETED);
             enrollment.setCompletedAt(LocalDateTime.now());
+            certificateService.issueCertificate(enrollment);
         }
 
         return ProgressResponse.from(enrollment);

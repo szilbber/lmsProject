@@ -74,7 +74,7 @@ public class QuizService {
 
         // 7-8. если сдал, отмечаем урок пройденным и сохраняем балл
         if (passed) {
-            enrollmentService.completeLesson(enrollment.getId(), quizId);
+            enrollmentService.markCompleted(enrollment.getId(), quizId);
             enrollment.getCompletedLessons().stream()
                     .filter(p -> p.getLesson().getId().equals(quizId))
                     .findFirst()

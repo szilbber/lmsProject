@@ -46,6 +46,9 @@ public class Course {
     @OneToMany(mappedBy = "course")
     private List<Enrollment> enrollments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "course")
+    private List<Certificate> certificates = new ArrayList<>();
+
     @PrePersist
     void onCreate() {
         createdAt = LocalDateTime.now();

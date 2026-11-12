@@ -18,7 +18,8 @@ public class GlobalExceptionHandler {
             StudentNotFoundException.class,
             InstructorNotFoundException.class,
             EnrollmentNotFoundException.class,
-            LessonNotFoundException.class
+            LessonNotFoundException.class,
+            CertificateNotFoundException.class
     })
     public ProblemDetail handleNotFound(RuntimeException e) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
