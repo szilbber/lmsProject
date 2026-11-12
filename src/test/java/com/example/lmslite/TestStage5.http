@@ -1,0 +1,50 @@
+### 0. Новый студент
+POST http://localhost:8080/api/students
+Content-Type: application/json
+
+{"firstName": "Новый", "lastName": "Студент", "email": "check1@test.com"}
+
+###0.1 Активировать курс
+PATCH  http://localhost:8080/api/courses/7/publish
+
+### 1. Студент записывается на опубликованный курс
+POST http://localhost:8080/api/enrollments
+Content-Type: application/json
+
+{"studentId": 8, "courseId": 7}
+
+### 2. Нельзя записаться дважды (409)
+POST http://localhost:8080/api/enrollments
+Content-Type: application/json
+
+{"studentId": 8, "courseId": 7}
+
+### 3.1 Прогресс до начала
+GET http://localhost:8080/api/enrollments/5/progress
+
+### 3.2 Пройти видеоурок
+POST http://localhost:8080/api/enrollments/5/lessons/17/complete
+
+### 3.3 Пройти его ещё раз
+POST http://localhost:8080/api/enrollments/5/lessons/18/complete
+
+### 4.1 Сдать тест с верным ответом
+POST http://localhost:8080/api/lessons/18/submit
+Content-Type: application/json
+
+{"enrollmentId": 5, "answers": [{"questionId": 18, "selectedOption": 2}]}
+
+### 4.2 Сдать тест с неверным ответом
+POST http://localhost:8080/api/lessons/18/submit
+Content-Type: application/json
+
+{"enrollmentId": 5, "answers": [{"questionId": 18, "selectedOption": 1}]}
+
+### 4.3 Прогресс после теста
+GET http://localhost:8080/api/enrollments/5/progress
+
+### 5.1 Пройти последний урок
+POST http://localhost:8080/api/enrollments/5/lessons/13/complete
+
+### 5.2 Проверить статус записи
+GET http://localhost:8080/api/enrollments/5

@@ -4,6 +4,7 @@ import com.example.lmslite.dto.CourseResponse;
 import com.example.lmslite.dto.CreateInstructorRequest;
 import com.example.lmslite.dto.InstructorResponse;
 import com.example.lmslite.services.InstructorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class InstructorController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public InstructorResponse createInstructor(@RequestBody CreateInstructorRequest request){
+    public InstructorResponse createInstructor(@Valid @RequestBody CreateInstructorRequest request){
         return instructorService.createInstructor(request);
     }
 
@@ -32,7 +33,5 @@ public class InstructorController {
     public List<CourseResponse> getCourses(@PathVariable Long id) {
         return instructorService.getInstructorCourses(id);
     }
-
-
 
 }

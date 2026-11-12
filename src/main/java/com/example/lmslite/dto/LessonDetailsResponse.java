@@ -2,9 +2,7 @@ package com.example.lmslite.dto;
 
 import com.example.lmslite.enums.LessonType;
 import com.example.lmslite.model.*;
-import com.example.lmslite.repositories.LessonRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public record LessonDetailsResponse(

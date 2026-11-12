@@ -1,9 +1,6 @@
 package com.example.lmslite.services;
 
-import com.example.lmslite.dto.CreateLessonRequest;
-import com.example.lmslite.dto.LessonDetailsResponse;
-import com.example.lmslite.dto.LessonResponse;
-import com.example.lmslite.dto.QuestionRequest;
+import com.example.lmslite.dto.*;
 import com.example.lmslite.exception.CourseNotFoundException;
 import com.example.lmslite.exception.LessonNotFoundException;
 import com.example.lmslite.model.*;
@@ -91,26 +88,34 @@ public class LessonService {
     private void fillLesson(Lesson lesson, CreateLessonRequest request) {
         lesson.setTitle(request.title());
 
-        if (lesson instanceof VideoLesson video) {
-            video.setVideoUrl(request.videoUrl());
-            video.setDurationMinutes(required(request.durationMinutes(), "durationMinutes"));
-        } else if (lesson instanceof TextLesson text) {
-            text.setContent(request.content());
-            text.setReadingTimeMinutes(required(request.readingTimeMinutes(), "readingTimeMinutes"));
-        } else if (lesson instanceof QuizLesson quiz) {
-            quiz.setPassingScore(required(request.passingScore(), "passingScore"));
-            quiz.setTimeLimitMinutes(request.timeLimitMinutes());
-            quiz.getQuestions().clear();
-            if (request.questions() != null) {
-                for (QuestionRequest item : request.questions()) {
-                    Question question = new Question();
-                    question.setText(item.text());
-                    question.setOptions(new ArrayList<>(item.options()));
-                    question.setCorrectOptionIndex(item.correctOptionIndex());
-                    question.setQuiz(quiz);
-                    quiz.getQuestions().add(question);
+        switch (lesson) {
+            case VideoLesson video -> {
+                video.setVideoUrl(request.videoUrl());
+                video.setDurationMinutes(required(request.durationMinutes(), "durationMinutes"));
+            }
+            case TextLesson text -> {
+                text.setContent(request.content());
+                text.setReadingTimeMinutes(required(request.readingTimeMinutes(), "readingTimeMinutes"));
+            }
+            case QuizLesson quiz -> {
+                quiz.setPassingScore(required(request.passingScore(), "passingScore"));
+                quiz.setTimeLimitMinutes(request.timeLimitMinutes());
+                quiz.getQuestions().clear();
+                if (request.questions() != null) {
+                    for (QuestionRequest item : request.questions()) {
+                        if (item.correctOptionIndex() >= item.options().size()) {
+                            throw new IllegalArgumentException("correctOptionIndex выходит за пределы списка вариантов");
+                        }
+                        Question question = new Question();
+                        question.setText(item.text());
+                        question.setOptions(new ArrayList<>(item.options()));
+                        question.setCorrectOptionIndex(item.correctOptionIndex());
+                        question.setQuiz(quiz);
+                        quiz.getQuestions().add(question);
+                    }
                 }
             }
+            default -> throw new IllegalStateException("Тип урока не определен");
         }
     }
 }

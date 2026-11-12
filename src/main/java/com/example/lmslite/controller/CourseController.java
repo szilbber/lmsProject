@@ -4,6 +4,7 @@ import com.example.lmslite.dto.CourseDetailsWithLessonsResponse;
 import com.example.lmslite.dto.CourseResponse;
 import com.example.lmslite.dto.CreateCourseRequest;
 import com.example.lmslite.services.CourseService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class CourseController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CourseResponse createCourse(@RequestBody CreateCourseRequest request){
+    public CourseResponse createCourse(@Valid @RequestBody CreateCourseRequest request){
         return courseService.createCourse(request);
     }
 
@@ -34,7 +35,7 @@ public class CourseController {
     }
 
     @PutMapping("/{id}")
-    public CourseResponse updateCourse(@PathVariable Long id, @RequestBody CreateCourseRequest request) {
+    public CourseResponse updateCourse(@PathVariable Long id, @Valid @RequestBody CreateCourseRequest request) {
         return courseService.updateCourse(id, request);
     }
 

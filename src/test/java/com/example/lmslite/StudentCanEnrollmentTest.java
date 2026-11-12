@@ -1,5 +1,6 @@
 package com.example.lmslite;
 
+import com.example.lmslite.dto.EnrollmentResponse;
 import com.example.lmslite.model.Course;
 import com.example.lmslite.model.Enrollment;
 import com.example.lmslite.model.Student;
@@ -46,10 +47,10 @@ class StudentCanEnrollmentTest {
          when(enrollmentRepository.save(any(Enrollment.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        Enrollment result = enrollmentService.enrollStudent(1L, 2L);
+        EnrollmentResponse result = enrollmentService.enrollStudent(1L, 2L);
 
-        assertSame(student, result.getStudent());
-        assertSame(course, result.getCourse());
+        assertSame(student.getId(), result.studentId());
+        assertSame(course.getId(), result.courseId());
         verify(enrollmentRepository).save(any(Enrollment.class));
     }
 }
