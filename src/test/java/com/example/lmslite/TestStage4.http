@@ -14,22 +14,22 @@ Content-Type: application/json
 POST http://localhost:8080/api/courses
 Content-Type: application/json
 
-{"title": "Ruby для начинающих", "description": "Третий курс", "instructorId": 4}
+{"title": "Выдающий сертификат", "description": "Курс курс", "instructorId": 1}
 
 ### 4. Добавить видеоурок
-POST http://localhost:8080/api/courses/10/lessons
+POST http://localhost:8080/api/courses/12/lessons
 Content-Type: application/json
 
 {"title": "Введение", "type": "VIDEO", "videoUrl": "https://example.com/v1", "durationMinutes": 1}
 
 ### 5. Добавить текстовый урок
-POST http://localhost:8080/api/courses/10/lessons
+POST http://localhost:8080/api/courses/12/lessons
 Content-Type: application/json
 
 {"title": "Переменные", "type": "TEXT", "content": "# Переменные", "readingTimeMinutes": 10}
 
 ### 6. Добавить тест с вопросом
-POST http://localhost:8080/api/courses/10/lessons
+POST http://localhost:8080/api/courses/8/lessons
 Content-Type: application/json
 
 {"title": "Тест продвинутый", "type": "QUIZ", "passingScore": 70, "timeLimitMinutes": 9,
