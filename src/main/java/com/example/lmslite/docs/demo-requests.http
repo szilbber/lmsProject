@@ -1,0 +1,163 @@
+########################################
+# ДЕМО-ДАННЫЕ ДЛЯ ПУСТОЙ БАЗЫ
+# Запускать по порядку, один раз.
+# id в запросах рассчитаны на пустую базу.
+########################################
+
+### 1. Инструктор (id 1)
+POST http://localhost:8080/api/instructors
+Content-Type: application/json
+
+{"firstName": "Анна", "lastName": "Смирнова", "email": "anna@example.com", "bio": "Преподаватель Java"}
+
+### 2. Студенты (id 1, 2, 3)
+POST http://localhost:8080/api/students
+Content-Type: application/json
+
+{"firstName": "Иван", "lastName": "Иванов", "email": "ivan@example.com"}
+
+###
+POST http://localhost:8080/api/students
+Content-Type: application/json
+
+{"firstName": "Мария", "lastName": "Петрова", "email": "maria@example.com"}
+
+###
+POST http://localhost:8080/api/students
+Content-Type: application/json
+
+{"firstName": "Пётр", "lastName": "Сидоров", "email": "petr@example.com"}
+
+### 3. Курс 1: Java для начинающих (id 1)
+POST http://localhost:8080/api/courses
+Content-Type: application/json
+
+{"title": "Java для начинающих", "description": "Основы языка Java", "instructorId": 1}
+
+### 4. Уроки курса 1: видео (id 1), текст (id 2), тест (id 3, вопросы 1 и 2)
+POST http://localhost:8080/api/courses/1/lessons
+Content-Type: application/json
+
+{"title": "Введение", "type": "VIDEO", "videoUrl": "https://example.com/intro", "durationMinutes": 15}
+
+###
+POST http://localhost:8080/api/courses/1/lessons
+Content-Type: application/json
+
+{"title": "Переменные и типы", "type": "TEXT", "content": "# Переменные\n\nint, boolean, String", "readingTimeMinutes": 10}
+
+###
+POST http://localhost:8080/api/courses/1/lessons
+Content-Type: application/json
+
+{"title": "Тест по основам", "type": "QUIZ", "passingScore": 70, "timeLimitMinutes": 10,
+  "questions": [
+    {"text": "Что выведет System.out.println(2+2)?", "options": ["3", "4", "22", "Ошибка"], "correctOptionIndex": 1},
+    {"text": "Какой тип у значения true?", "options": ["int", "boolean", "String"], "correctOptionIndex": 1}
+  ]}
+
+### 5. Курс 2: Spring Boot (id 2) с уроками 4 и 5
+POST http://localhost:8080/api/courses
+Content-Type: application/json
+
+{"title": "Spring Boot: основы", "description": "REST API на Spring Boot", "instructorId": 1}
+
+###
+POST http://localhost:8080/api/courses/2/lessons
+Content-Type: application/json
+
+{"title": "Что такое Spring", "type": "TEXT", "content": "# Spring", "readingTimeMinutes": 5}
+
+###
+POST http://localhost:8080/api/courses/2/lessons
+Content-Type: application/json
+
+{"title": "Первое приложение", "type": "VIDEO", "videoUrl": "https://example.com/spring", "durationMinutes": 20}
+
+### 6. Курс 3: черновик без уроков (id 3)
+POST http://localhost:8080/api/courses
+Content-Type: application/json
+
+{"title": "Docker для начинающих", "description": "Пока черновик", "instructorId": 1}
+
+### 7. Опубликовать курсы 1 и 2 (курс 3 остаётся черновиком)
+PATCH http://localhost:8080/api/courses/1/publish
+
+###
+PATCH http://localhost:8080/api/courses/2/publish
+
+### 8. Записи: Иван на курс 1 (id 1), Мария на курс 1 (id 2), Пётр на курс 2 (id 3)
+POST http://localhost:8080/api/enrollments
+Content-Type: application/json
+
+{"studentId": 1, "courseId": 1}
+
+###
+POST http://localhost:8080/api/enrollments
+Content-Type: application/json
+
+{"studentId": 2, "courseId": 1}
+
+###
+POST http://localhost:8080/api/enrollments
+Content-Type: application/json
+
+{"studentId": 3, "courseId": 2}
+
+### 9. Иван проходит курс 1 целиком: видео, текст, тест (оба ответа верные)
+POST http://localhost:8080/api/enrollments/1/lessons/1/complete
+
+###
+POST http://localhost:8080/api/enrollments/1/lessons/2/complete
+
+###
+POST http://localhost:8080/api/lessons/3/submit
+Content-Type: application/json
+
+{"enrollmentId": 1, "answers": [{"questionId": 1, "selectedOption": 1}, {"questionId": 2, "selectedOption": 1}]}
+
+### 10. Мария проходит видео и проваливает тест (1 из 2 верно, 50% при проходном 70%)
+POST http://localhost:8080/api/enrollments/2/lessons/1/complete
+
+###
+POST http://localhost:8080/api/lessons/3/submit
+Content-Type: application/json
+
+{"enrollmentId": 2, "answers": [{"questionId": 1, "selectedOption": 1}, {"questionId": 2, "selectedOption": 0}]}
+
+### 11. Пётр проходит первый урок курса 2 (прогресс 50%)
+POST http://localhost:8080/api/enrollments/3/lessons/4/complete
+
+########################################
+# ПРОВЕРКА РЕЗУЛЬТАТА
+########################################
+
+### Опубликованные курсы: два (Java и Spring Boot), черновика нет
+GET http://localhost:8080/api/courses
+
+### Детали курса 1: 3 урока, 35 минут (15 + 10 + 10)
+GET http://localhost:8080/api/courses/1
+
+### Прогресс Ивана: 100%, status COMPLETED
+GET http://localhost:8080/api/enrollments/1/progress
+
+### Прогресс Марии: 33%, тест не засчитан
+GET http://localhost:8080/api/enrollments/2/progress
+
+### Прогресс Петра: 50%
+GET http://localhost:8080/api/enrollments/3/progress
+
+### Сертификат Ивана
+GET http://localhost:8080/api/students/1/certificates
+
+### Скачать сертификат (id 1)
+GET http://localhost:8080/api/certificates/1/download
+
+### Ошибки: повторная запись (409)
+POST http://localhost:8080/api/enrollments
+Content-Type: application/json
+
+{"studentId": 1, "courseId": 1}
+
+### Ошибка: тест нельзя отметить через complete (400)
+POST http://localhost:8080/api/enrollments/2/lessons/3/complete
